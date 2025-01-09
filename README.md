@@ -102,8 +102,8 @@ myfoodapi/
 
 1. **Склонировать репозиторий**:
    ```bash
-   git clone https://github.com/<username>/myfoodapi.git
-   cd myfoodapi
+   git clone https://github.com/aidarsnotion/azyk.git
+   cd azyk
 Установить зависимости (в корневой папке):
 
 ```bash
