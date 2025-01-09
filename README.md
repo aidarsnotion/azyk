@@ -77,23 +77,18 @@
 
 Пример:
 ```bash
-myfoodapi/
-  ├─ cmd/
-  │   └─ main.go                  # Точка входа в приложение
-  ├─ config/
-  │   └─ db.go                    # Подключение к БД (инициализация GORM)
-  ├─ domain/
-  │   ├─ product.go               # Сущности и интерфейсы для продуктов
-  │   └─ region.go                # Аналогично для регионов (пример)
-  ├─ repository/
-  │   └─ product_repository.go    # Реализация ProductRepository (GORM)
-  ├─ usecase/
-  │   └─ product_usecase.go       # Бизнес-логика для продуктов
-  ├─ handler/
-  │   └─ product_handler.go       # Обработчики HTTP (Gin)
-  ├─ go.mod
-  ├─ go.sum
-  └─ README.md
+azyk/
+  ├───cmd
+  ├───config
+  ├───internal
+  │   ├───delivery
+  │   │   ├───http
+  │   │   └───middleware
+  │   ├───domain
+  │   │   └───models
+  │   ├───repository
+  │   └───usecase
+  └───util
 ```
 
 ---
