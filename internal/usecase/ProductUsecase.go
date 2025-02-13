@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"azyk/internal/domain"
 	"azyk/internal/domain/models"
+	"azyk/internal/domain/repository"
 )
 
 type ProductUsecase interface {
@@ -14,10 +14,10 @@ type ProductUsecase interface {
 }
 
 type productUsecase struct {
-	repo domain.ProductRepository
+	repo repository.ProductRepository
 }
 
-func NewProductUsecase(r domain.ProductRepository) ProductUsecase {
+func NewProductUsecase(r repository.ProductRepository) ProductUsecase {
 	return &productUsecase{repo: r}
 }
 

@@ -27,7 +27,7 @@ type Config struct {
 func LoadConfig() (config Config, err error) {
 	// Загрузка переменных из .env файла
 	if err = godotenv.Load(); err != nil {
-		log.Println("Не удалось загрузить .env файл, продолжаем с существующими переменными окружения")
+		log.Println("Could not find or load .env file. Falling back to system environment variables.")
 	}
 
 	// Говорим Viper автоматически считывать все переменные окружения

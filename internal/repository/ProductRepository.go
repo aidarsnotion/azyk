@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"myfoodapi/internal/domain"
-	"myfoodapi/internal/domain/models"
+	"azyk/internal/domain/models"
+	"azyk/internal/domain/repository"
 
 	"gorm.io/gorm"
 )
@@ -11,7 +11,7 @@ type productRepository struct {
 	db *gorm.DB
 }
 
-func NewProductRepository(db *gorm.DB) domain.ProductRepository {
+func NewProductRepository(db *gorm.DB) repository.ProductRepository {
 	return &productRepository{db: db}
 }
 

@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"strconv"
 
+	"azyk/internal/domain/models"
+	"azyk/internal/usecase"
 	"github.com/gin-gonic/gin"
-	"myfoodapi/internal/domain/models"
-	"myfoodapi/internal/usecase"
 )
 
 type ProductHandler struct {
