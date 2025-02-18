@@ -17,5 +17,3 @@ type ProductTranslation struct {
 	ProductName string
 	Description string
 }
-
-// Аналогично определяются Region, RegionTranslation и прочие сущности...

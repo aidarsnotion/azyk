@@ -8,7 +8,7 @@ import (
 )
 
 type AuthUseCase interface {
-	Login(email, password, deviceId string) (*models.User, error)
+	Login(email, password, deviceId string) (*models.User, string, error)
 	Logout(userId int) error
 }
 
@@ -24,32 +24,38 @@ func NewAuthUseCase(userRepo repository.UserRepository, sessionRepo repository.S
 	}
 }
 
-func (a *authUseCase) Login(email, password, deviceId string) (*models.User, error) {
+func (a *authUseCase) Login(email, password, deviceId string) (*models.User, string, error) {
 	user, err := a.userRepo.GetUserByEmail(email)
 	if err != nil {
-		return nil, errors.New("invalid email or password")
+		return nil, "", errors.New("invalid email or password")
 	}
 
-	// Check password
+	// Проверяем пароль
 	if !util.CheckPasswordHash(password, user.Password) {
-		return nil, errors.New("invalid email or password")
+		return nil, "", errors.New("invalid email or password")
 	}
 
+	// Проверяем активные сессии (если роль требует 1 устройство)
 	if user.Role == models.RoleIndividual || user.Role == models.RoleLegalEntity || user.Role == models.RoleScientific {
 		existingSession, _ := a.sessionRepo.GetActiveSession(user.ID)
 		if existingSession != nil {
-			// Kill session
-			a.sessionRepo.DeleteSession(user.ID)
+			a.sessionRepo.DeleteSession(user.ID) // Удаляем старую сессию
 		}
 	}
 
-	//Creating new session
-	_, err = a.sessionRepo.CreateSession(user.ID, deviceId)
+	// Создаем новую сессию
+	err = a.sessionRepo.CreateSession(user.ID, deviceId)
 	if err != nil {
-		return nil, err
+		return nil, "", err
 	}
 
-	return user, nil
+	// Генерируем JWT-токен
+	token, err := util.GenerateJWT(user.ID, string(user.Role))
+	if err != nil {
+		return nil, "", err
+	}
+
+	return user, token, nil
 }
 
 func (a *authUseCase) Logout(userId int) error {

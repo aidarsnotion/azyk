@@ -5,13 +5,16 @@ import (
 	"log"
 
 	"azyk/config"
-
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-// InitDB устанавливает соединение с PostgreSQL используя настройки из конфигурации.
-func InitDB(cfg config.Config) *gorm.DB {
+type Database struct {
+	DB *gorm.DB
+}
+
+// InitDB устанавливает соединение с PostgreSQL
+func InitDB(cfg config.Config) *Database {
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=UTC",
 		cfg.Database.Host,
@@ -27,5 +30,6 @@ func InitDB(cfg config.Config) *gorm.DB {
 		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
 	}
 
-	return db
+	log.Println("Подключение к базе данных успешно!")
+	return &Database{DB: db}
 }

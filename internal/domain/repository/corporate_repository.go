@@ -2,8 +2,9 @@ package repository
 
 import (
 	"azyk/internal/domain/models"
-	"database/sql"
 	"errors"
+
+	"gorm.io/gorm"
 )
 
 type CorporateRepository interface {
@@ -14,14 +15,14 @@ type CorporateRepository interface {
 }
 
 type corporateRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
-func NewCorporateRepository(db *sql.DB) CorporateRepository {
+func NewCorporateRepository(db *gorm.DB) CorporateRepository {
 	return &corporateRepository{db: db}
 }
 
-// 🔹 Добавление сотрудника
+// Добавление сотрудника
 func (r *corporateRepository) AddEmployee(orgID int, user *models.User) error {
 	count, _ := r.GetEmployeeCount(orgID)
 	max, _ := r.GetMaxEmployees(orgID)
@@ -30,38 +31,35 @@ func (r *corporateRepository) AddEmployee(orgID int, user *models.User) error {
 		return errors.New("employee limit reached")
 	}
 
-	_, err := r.db.Exec("INSERT INTO users (name, email, role, org_id) VALUES (?, ?, ?, ?)",
-		user.Name, user.Email, models.RoleCorporate, orgID)
-	return err
+	user.OrgID = &orgID
+	user.Role = models.RoleCorporate
+
+	return r.db.Create(&user).Error
 }
 
-// 🔹 Получение сотрудников организации
+// Получение сотрудников организации
 func (r *corporateRepository) GetEmployees(orgID int) ([]*models.User, error) {
-	rows, err := r.db.Query("SELECT id, name, email FROM users WHERE org_id = ?", orgID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
 	var employees []*models.User
-	for rows.Next() {
-		var user models.User
-		rows.Scan(&user.ID, &user.Name, &user.Email)
-		employees = append(employees, &user)
-	}
-	return employees, nil
+	err := r.db.Where("org_id = ?", orgID).Find(&employees).Error
+	return employees, err
 }
 
-// 🔹 Получение текущего количества сотрудников
+// Получение текущего количества сотрудников в организации
 func (r *corporateRepository) GetEmployeeCount(orgID int) (int, error) {
-	var count int
-	err := r.db.QueryRow("SELECT COUNT(*) FROM users WHERE org_id = ?", orgID).Scan(&count)
-	return count, err
+	var count int64
+	err := r.db.Model(&models.User{}).Where("org_id = ?", orgID).Count(&count).Error
+	return int(count), err
 }
 
-// 🔹 Получение максимального лимита сотрудников
+// Получение максимального лимита сотрудников организации
 func (r *corporateRepository) GetMaxEmployees(orgID int) (int, error) {
-	var max int
-	err := r.db.QueryRow("SELECT max_employees FROM organizations WHERE id = ?", orgID).Scan(&max)
-	return max, err
+	var maxEmployees int
+	err := r.db.Table("organizations").Select("max_employees").Where("id = ?", orgID).Scan(&maxEmployees).Error
+	if err != nil {
+		return 0, err
+	}
+	if maxEmployees == 0 {
+		return 0, errors.New("organization not found or max_employees not set")
+	}
+	return maxEmployees, nil
 }

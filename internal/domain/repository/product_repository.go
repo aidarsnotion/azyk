@@ -2,16 +2,21 @@ package repository
 
 import (
 	"azyk/internal/domain/models"
-	"azyk/internal/domain/repository"
-
 	"gorm.io/gorm"
 )
+
+type ProductRepository interface {
+	Create(product *models.Product) error
+	GetByID(id uint) (*models.Product, error)
+	Update(product *models.Product) error
+	Delete(id uint) error
+}
 
 type productRepository struct {
 	db *gorm.DB
 }
 
-func NewProductRepository(db *gorm.DB) repository.ProductRepository {
+func NewProductRepository(db *gorm.DB) ProductRepository {
 	return &productRepository{db: db}
 }
 

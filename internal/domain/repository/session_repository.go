@@ -6,7 +6,7 @@ import (
 )
 
 type SessionRepository interface {
-	CreateSession(userID int, deviceID string) (string, error)
+	CreateSession(userID int, deviceID string) error
 	GetActiveSession(userID int) (*models.Session, error)
 	DeleteSession(userID int) error
 }
@@ -15,7 +15,7 @@ type sessionRepository struct {
 	db *sql.DB
 }
 
-func NewSessionRepository(db *sql.DB) sessionRepository {
+func NewSessionRepository(db *sql.DB) SessionRepository {
 	return &sessionRepository{db: db}
 }
 
@@ -34,6 +34,16 @@ func (r *sessionRepository) CreateSession(userID int, deviceID string) error {
 
 	_, err = r.db.Exec("INSERT INTO session (user_id, device_id, created_at) VALUES (?, ?, NOW())", userID, deviceID)
 	return err
+}
+
+func (r *sessionRepository) GetActiveSession(userID int) (*models.Session, error) {
+	var session models.Session
+	err := r.db.QueryRow("SELECT id, user_id, device_id, created_at FROM sessions WHERE user_id = ?",
+		userID).Scan(&session.ID, &session.UserId, &session.UserId, &session.CreatedAt)
+	if err == sql.ErrNoRows {
+		return nil, nil
+	}
+	return &session, err
 }
 
 // Удаление сессии пользователя

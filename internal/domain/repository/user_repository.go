@@ -22,14 +22,14 @@ func NewUserRepository(db *sql.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-// 🔹 Создание пользователя
+// Create usre
 func (r *userRepository) CreateUser(user *models.User) error {
 	query := "INSERT INTO users (name, email, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING id"
 	err := r.db.QueryRow(query, user.Name, user.Email).Scan(&user.ID)
 	return err
 }
 
-// 🔹 Получение пользователя по id
+// Get user by id
 func (r *userRepository) GetUserByID(id int) (*models.User, error) {
 	user := &models.User{}
 	query := "SELECT id, name, email, created_at, updated_at FROM users WHERE id = $1"
@@ -40,7 +40,7 @@ func (r *userRepository) GetUserByID(id int) (*models.User, error) {
 	return user, err
 }
 
-// 🔹 Получение пользователя по email
+// get user by email
 func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
 	user := &models.User{}
 	query := "SELECT id, name, email, created_at, updated_at FROM users WHERE email = $1"
@@ -51,7 +51,7 @@ func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
 	return user, err
 }
 
-// 🔹 Обновление пользователя
+// ubdate user
 func (r *userRepository) UpdateUser(user *models.User) error {
 	query := "UPDATE users SET name = $1, email = $2, updated_at = NOW() WHERE id = $3"
 	res, err := r.db.Exec(query, user.Name, user.Email, user.ID)
@@ -65,7 +65,7 @@ func (r *userRepository) UpdateUser(user *models.User) error {
 	return nil
 }
 
-// 🔹 Удаление пользователя
+// delete user
 func (r *userRepository) DeleteUser(id int) error {
 	query := "DELETE FROM users WHERE id = $1"
 	res, err := r.db.Exec(query, id)

@@ -7,7 +7,7 @@ import (
 
 	"azyk/internal/delivery/http"
 	"azyk/internal/domain/models"
-	"azyk/internal/repository"
+	"azyk/internal/domain/repository"
 	"azyk/internal/usecase"
 	"github.com/gin-gonic/gin"
 )
@@ -26,11 +26,11 @@ func main() {
 	db.AutoMigrate(&models.Product{}, &models.ProductTranslation{} /*, остальные модели... */)
 
 	// Инициализация слоёв: репозиторий, usecase и HTTP-обработчики
-	productRepo := repository.NewProductRepository(db)
-	productUC := usecase.NewProductUsecase(productRepo)
+	userRepo := repository.NewUserRepository(db)
+	userUC := usecase.NewProductUsecase(userRepo)
 
 	router := gin.Default()
-	http.NewProductHandler(router, productUC)
+	http.NewProductHandler(router, userUC)
 
 	// Запуск сервера
 	router.Run(":8080")
