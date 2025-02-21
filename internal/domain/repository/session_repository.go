@@ -2,7 +2,8 @@ package repository
 
 import (
 	"azyk/internal/domain/models"
-	"database/sql"
+
+	"gorm.io/gorm"
 )
 
 type SessionRepository interface {
@@ -12,42 +13,49 @@ type SessionRepository interface {
 }
 
 type sessionRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
-func NewSessionRepository(db *sql.DB) SessionRepository {
+func NewSessionRepository(db *gorm.DB) SessionRepository {
 	return &sessionRepository{db: db}
 }
 
-// Создание новой сессии (если роль требует 1 устройства — удаляем старую)
+// CreateSession создает новую сессию для пользователя.
+// Если активная сессия уже существует, она удаляется (при условии, что пользователь может иметь только одно устройство).
 func (r *sessionRepository) CreateSession(userID int, deviceID string) error {
-	//Проверяем активную сессию
-	var existinSession models.Session
-	err := r.db.QueryRow("SELECT id FROM session WHERE user_id = ?", userID).Scan(&existinSession.ID)
+	var existingSession models.Session
+	err := r.db.Where("user_id = ?", userID).First(&existingSession).Error
 	if err == nil {
-		//Если есть активная сессия, удалим её (если роль требует 1 устройство)
-		_, err = r.db.Exec("DELETE FROM session WHERE user_id = ?", userID)
-		if err != nil {
+		// Если активная сессия найдена, удаляем её.
+		if err := r.db.Where("user_id = ?", userID).Delete(&models.Session{}).Error; err != nil {
 			return err
 		}
+	} else if err != gorm.ErrRecordNotFound {
+		// Если произошла другая ошибка, возвращаем её.
+		return err
 	}
 
-	_, err = r.db.Exec("INSERT INTO session (user_id, device_id, created_at) VALUES (?, ?, NOW())", userID, deviceID)
-	return err
+	// Создаем новую сессию.
+	session := models.Session{
+		UserID:   userID,
+		DeviceID: deviceID,
+	}
+	return r.db.Create(&session).Error
 }
 
+// GetActiveSession возвращает активную сессию пользователя или nil, если сессия не найдена.
 func (r *sessionRepository) GetActiveSession(userID int) (*models.Session, error) {
 	var session models.Session
-	err := r.db.QueryRow("SELECT id, user_id, device_id, created_at FROM sessions WHERE user_id = ?",
-		userID).Scan(&session.ID, &session.UserId, &session.UserId, &session.CreatedAt)
-	if err == sql.ErrNoRows {
-		return nil, nil
+	if err := r.db.Where("user_id = ?", userID).First(&session).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, nil
+		}
+		return nil, err
 	}
-	return &session, err
+	return &session, nil
 }
 
-// Удаление сессии пользователя
+// DeleteSession удаляет сессию пользователя по его ID.
 func (r *sessionRepository) DeleteSession(userID int) error {
-	_, err := r.db.Exec("DELETE FROM session WHERE user_id = ?", userID)
-	return err
+	return r.db.Where("user_id = ?", userID).Delete(&models.Session{}).Error
 }

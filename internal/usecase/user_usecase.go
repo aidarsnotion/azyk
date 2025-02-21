@@ -33,16 +33,10 @@ func (u *userUsecase) RegisterUser(data models.CreateUserRequest) (*models.User,
 		return nil, err
 	}
 
-	// Хешируем пароль
-	hashedPassword, err := util.HashPassword(data.Password)
-	if err != nil {
-		return nil, err
-	}
-
 	user := &models.User{
 		Name:     data.Name,
 		Email:    data.Email,
-		Password: hashedPassword,
+		Password: data.Password,
 		Role:     data.Role,
 		OrgID:    data.OrgID,
 	}
@@ -53,7 +47,7 @@ func (u *userUsecase) RegisterUser(data models.CreateUserRequest) (*models.User,
 	}
 
 	// Добавляем пользователя в базу
-	err = u.userRepo.CreateUser(user)
+	err := u.userRepo.CreateUser(user)
 	return user, err
 }
 

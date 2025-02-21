@@ -23,7 +23,7 @@ func main() {
 	db := util.InitDB(cfg)
 
 	// Автоматическая миграция моделей (при необходимости)
-	db.AutoMigrate(&models.Product{}, &models.ProductTranslation{} /*, остальные модели... */)
+	db.DB.AutoMigrate(&models.Product{}, &models.ProductTranslation{} /*, остальные модели... */)
 
 	// Инициализация слоёв: репозиторий, usecase и HTTP-обработчики
 	userRepo := repository.NewUserRepository(db)

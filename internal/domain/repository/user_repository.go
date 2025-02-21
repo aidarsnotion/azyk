@@ -2,8 +2,9 @@ package repository
 
 import (
 	"azyk/internal/domain/models"
-	"database/sql"
+	"azyk/util"
 	"errors"
+	"gorm.io/gorm"
 )
 
 type UserRepository interface {
@@ -15,66 +16,90 @@ type UserRepository interface {
 }
 
 type userRepository struct {
-	db *sql.DB
+	db *gorm.DB
 }
 
-func NewUserRepository(db *sql.DB) UserRepository {
+func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-// Create usre
+// CreateUser создает нового пользователя
 func (r *userRepository) CreateUser(user *models.User) error {
-	query := "INSERT INTO users (name, email, created_at, updated_at) VALUES ($1, $2, NOW(), NOW()) RETURNING id"
-	err := r.db.QueryRow(query, user.Name, user.Email).Scan(&user.ID)
-	return err
-}
-
-// Get user by id
-func (r *userRepository) GetUserByID(id int) (*models.User, error) {
-	user := &models.User{}
-	query := "SELECT id, name, email, created_at, updated_at FROM users WHERE id = $1"
-	err := r.db.QueryRow(query, id).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
-	if err == sql.ErrNoRows {
-		return nil, errors.New("user not found")
-	}
-	return user, err
-}
-
-// get user by email
-func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
-	user := &models.User{}
-	query := "SELECT id, name, email, created_at, updated_at FROM users WHERE email = $1"
-	err := r.db.QueryRow(query, email).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
-	if err == sql.ErrNoRows {
-		return nil, errors.New("user not found")
-	}
-	return user, err
-}
-
-// ubdate user
-func (r *userRepository) UpdateUser(user *models.User) error {
-	query := "UPDATE users SET name = $1, email = $2, updated_at = NOW() WHERE id = $3"
-	res, err := r.db.Exec(query, user.Name, user.Email, user.ID)
+	// Хешируем пароль перед сохранением
+	pass, err := util.HashPassword(user.Password)
 	if err != nil {
 		return err
 	}
-	rowsAffected, _ := res.RowsAffected()
-	if rowsAffected == 0 {
-		return errors.New("user not found")
+
+	user.Password = pass
+
+	// Создаем пользователя в базе данных
+	if err := r.db.Create(user).Error; err != nil {
+		return err
 	}
+
 	return nil
 }
 
-// delete user
-func (r *userRepository) DeleteUser(id int) error {
-	query := "DELETE FROM users WHERE id = $1"
-	res, err := r.db.Exec(query, id)
-	if err != nil {
+// GetUserByID возвращает пользователя по ID
+func (r *userRepository) GetUserByID(id int) (*models.User, error) {
+	var user models.User
+	if err := r.db.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+// GetUserByEmail возвращает пользователя по email
+func (r *userRepository) GetUserByEmail(email string) (*models.User, error) {
+	var user models.User
+	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("user not found")
+		}
+		return nil, err
+	}
+	return &user, nil
+}
+
+// UpdateUser обновляет данные пользователя
+func (r *userRepository) UpdateUser(user *models.User) error {
+	// Обновляем только указанные поля
+	updates := map[string]interface{}{
+		"name":       user.Name,
+		"email":      user.Email,
+		"updated_at": gorm.Expr("NOW()"),
+	}
+
+	// Если пароль был изменен, хешируем его
+	if user.Password != "" {
+		pass, err := util.HashPassword(user.Password)
+		if err != nil {
+			return err
+		}
+
+		user.Password = pass
+		updates["password"] = user.Password
+	}
+
+	// Обновляем пользователя по ID
+	if err := r.db.Model(&models.User{}).Where("id = ?", user.ID).Updates(updates).Error; err != nil {
 		return err
 	}
-	rowsAffected, _ := res.RowsAffected()
-	if rowsAffected == 0 {
-		return errors.New("user not found")
+
+	return nil
+}
+
+// DeleteUser удаляет пользователя по ID
+func (r *userRepository) DeleteUser(id int) error {
+	if err := r.db.Delete(&models.User{}, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("user not found")
+		}
+		return err
 	}
 	return nil
 }
