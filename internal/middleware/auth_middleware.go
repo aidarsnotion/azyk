@@ -1,11 +1,10 @@
 package middleware
 
 import (
+	"azyk/util"
 	"context"
 	"net/http"
 	"strings"
-
-	"azyk/util"
 )
 
 type contextKey string

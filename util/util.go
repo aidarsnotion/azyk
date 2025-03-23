@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"azyk/config"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 )
 
@@ -13,19 +13,27 @@ type Database struct {
 	DB *gorm.DB
 }
 
-// InitDB устанавливает соединение с PostgreSQL
+// InitDB устанавливает соединение с MS SQL.
 func InitDB(cfg config.Config) *Database {
-	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=UTC",
-		cfg.Database.Host,
+	// Если DATABASE_SSLMODE не задан, используем "disable"
+	sslMode := cfg.Database.SSLMode
+	if sslMode == "" {
+		sslMode = "disable"
+	}
+
+	// Формируем строку подключения для MS SQL.
+	// Формат строки подключения:
+	// sqlserver://username:password@host:port?database=dbname&encrypt=disable
+	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&encrypt=%s",
 		cfg.Database.User,
 		cfg.Database.Password,
-		cfg.Database.Name,
+		cfg.Database.Host,
 		cfg.Database.Port,
-		cfg.Database.SSLMode,
+		cfg.Database.Name,
+		sslMode,
 	)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
 	}
