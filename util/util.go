@@ -14,9 +14,10 @@ type Database struct {
 }
 
 // InitDB устанавливает соединение с MS SQL.
-func InitDB(cfg config.Config) *Database {
+func InitDB() *Database {
+	cfg := config.GetConfig()
 	// Если DATABASE_SSLMODE не задан, используем "disable"
-	sslMode := cfg.Database.SSLMode
+	sslMode := cfg.GetDatabaseSSLMode()
 	if sslMode == "" {
 		sslMode = "disable"
 	}
@@ -25,19 +26,19 @@ func InitDB(cfg config.Config) *Database {
 	// Формат строки подключения:
 	// sqlserver://username:password@host:port?database=dbname&encrypt=disable
 	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%d?database=%s&encrypt=%s",
-		cfg.Database.User,
-		cfg.Database.Password,
-		cfg.Database.Host,
-		cfg.Database.Port,
-		cfg.Database.Name,
+		cfg.GetDatabaseUser(),
+		cfg.GetDatabasePassword(),
+		cfg.GetDatabaseHost(),
+		cfg.GetDatabasePort(),
+		cfg.GetDatabaseName(),
 		sslMode,
 	)
 
 	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Не удалось подключиться к базе данных: %v", err)
+		log.Fatalf("Failed to connect to the database: %v", err)
 	}
 
-	log.Println("Подключение к базе данных успешно!")
+	log.Println("Connection to the database successful!")
 	return &Database{DB: db}
 }

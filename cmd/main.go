@@ -2,6 +2,8 @@ package main
 
 import (
 	"azyk/config"
+	"azyk/internal/usecase/auth"
+	"azyk/internal/usecase/throttling"
 	"azyk/util"
 	"log"
 
@@ -13,14 +15,16 @@ import (
 
 func main() {
 	// Загрузка конфигурации
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		log.Fatalf("Не удалось загрузить конфигурацию: %v", err)
+	if err := config.InitConfig(); err != nil {
+		log.Fatalf("failed to load config: %v", err)
 	}
-	log.Printf("Конфигурация: %+v", cfg)
+
+	cfg := config.GetConfig()
+	// Создаём throttler на основе in-memory реализации.
+	throttler := throttling.NewInMemoryThrottler(cfg.GetAuthorizationMaxLoginAttempts(), cfg.GetAuthorizationMaxLoginWindow())
 
 	// Подключение к базе данных
-	db := util.InitDB(cfg)
+	db := util.InitDB()
 
 	// Автоматическая миграция моделей (при необходимости)
 	db.DB.AutoMigrate(&models.User{}, &models.Session{} /*, остальные модели... */)
@@ -31,7 +35,7 @@ func main() {
 
 	// Создаём use-case: бизнес-логику для работы с пользователями и аутентификацией
 	userUC := usecase.NewUserUsecase(userRepo, sessionRepo)
-	authUC := usecase.NewAuthUseCase(userRepo, sessionRepo)
+	authUC := auth.NewAuthUseCase(userRepo, sessionRepo, throttler)
 
 	// Инициализация HTTP-обработчика для рецептуры
 	// Создаём роутер с зарегистрированными маршрутами (HTTP-обработчики)
@@ -39,6 +43,5 @@ func main() {
 
 	// Запуск сервера
 	// Запускаем HTTP-сервер
-	log.Println("Сервер запущен на :8080")
-	http.StartServer(router, "8080")
+	http.StartServer(router, ":8080")
 }

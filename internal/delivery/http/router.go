@@ -3,6 +3,7 @@ package http
 import (
 	"azyk/internal/middleware"
 	"azyk/internal/usecase"
+	"azyk/internal/usecase/auth"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -10,11 +11,11 @@ import (
 type Router struct {
 	mux         *mux.Router
 	UserUsecase usecase.UserUsecase
-	AuthUsecase usecase.AuthUseCase
+	AuthUsecase auth.AuthUseCase
 }
 
 // Новый конструктор Router
-func NewRouter(userUsecase usecase.UserUsecase, authUsecase usecase.AuthUseCase) *Router {
+func NewRouter(userUsecase usecase.UserUsecase, authUsecase auth.AuthUseCase) *Router {
 	r := &Router{
 		mux:         mux.NewRouter(),
 		UserUsecase: userUsecase,
