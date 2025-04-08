@@ -5,35 +5,47 @@ import (
 	"azyk/internal/domain/repository"
 )
 
-type ProductUsecase interface {
+// ProductService задаёт интерфейс бизнес‑логики для работы с продуктами.
+type ProductService interface {
 	CreateProduct(product *models.Product) error
-	GetProductByID(id uint) (*models.Product, error)
+	GetProductByID(id int32) (*models.Product, error)
 	UpdateProduct(product *models.Product) error
-	DeleteProduct(id uint) error
-	// Другие бизнес-логики...
+	DeleteProduct(id int32) error
+	ListProducts() ([]models.Product, error)
 }
 
-type productUsecase struct {
+// productService — реализация ProductService.
+type productService struct {
 	repo repository.ProductRepository
 }
 
-func NewProductUsecase(r repository.ProductRepository) ProductUsecase {
-	return &productUsecase{repo: r}
+// NewProductService создаёт новый экземпляр ProductService.
+func NewProductService(repo repository.ProductRepository) ProductService {
+	return &productService{repo: repo}
 }
 
-func (uc *productUsecase) CreateProduct(product *models.Product) error {
-	// Здесь можно добавить бизнес-логику, валидации и расчёты
-	return uc.repo.Create(product)
+// CreateProduct создаёт продукт через репозиторий.
+func (s *productService) CreateProduct(product *models.Product) error {
+	// Здесь можно добавить дополнительную бизнес-валидацию
+	return s.repo.Create(product)
 }
 
-func (uc *productUsecase) GetProductByID(id uint) (*models.Product, error) {
-	return uc.repo.GetByID(id)
+// GetProductByID возвращает продукт по id.
+func (s *productService) GetProductByID(id int32) (*models.Product, error) {
+	return s.repo.GetByID(id)
 }
 
-func (uc *productUsecase) UpdateProduct(product *models.Product) error {
-	return uc.repo.Update(product)
+// UpdateProduct обновляет данные продукта.
+func (s *productService) UpdateProduct(product *models.Product) error {
+	return s.repo.Update(product)
 }
 
-func (uc *productUsecase) DeleteProduct(id uint) error {
-	return uc.repo.Delete(id)
+// DeleteProduct удаляет продукт по id.
+func (s *productService) DeleteProduct(id int32) error {
+	return s.repo.Delete(id)
+}
+
+// ListProducts возвращает список всех продуктов.
+func (s *productService) ListProducts() ([]models.Product, error) {
+	return s.repo.List()
 }

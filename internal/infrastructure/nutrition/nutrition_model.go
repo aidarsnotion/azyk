@@ -106,7 +106,7 @@ func PredictSafety(composition map[string]float64, portionWeight float64) (float
 		inputVector[i] = val
 		percent := (val / rdaPortion[key]) * 100
 		if percent > 150 {
-			message += fmt.Sprintf("превышение по %s (%.0f%%); ", key, percent)
+			message += fmt.Sprintf("превышениепревышение по %s (%.0f%%); ", key, percent)
 		} else if percent < 70 {
 			message += fmt.Sprintf("дефицит по %s (%.0f%%); ", key, percent)
 		}

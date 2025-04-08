@@ -9,97 +9,88 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// ProductHandler обрабатывает HTTP‑запросы для работы с продуктами.
 type ProductHandler struct {
-	productUsecase usecase.ProductUsecase
+	productService usecase.ProductService
 }
 
-func NewProductHandler(r *gin.Engine, pu usecase.ProductUsecase) {
-	handler := &ProductHandler{
-		productUsecase: pu,
-	}
-	// Определите маршруты и свяжите их с методами обработчика
-	products := r.Group("/products")
-	{
-		products.GET("/:id", handler.GetProductByID)
-		products.POST("", handler.CreateProduct)
-		products.PUT("/:id", handler.UpdateProduct)
-		products.DELETE("/:id", handler.DeleteProduct)
-	}
+// NewProductHandler создаёт новый обработчик для продуктов.
+func NewProductHandler(productService usecase.ProductService) *ProductHandler {
+	return &ProductHandler{productService: productService}
 }
 
+// CreateProduct — POST /products
 func (h *ProductHandler) CreateProduct(c *gin.Context) {
 	var product models.Product
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	err := h.productUsecase.CreateProduct(&product)
-	if err != nil {
+	if err := h.productService.CreateProduct(&product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusCreated, product)
 }
 
+// GetProductByID — GET /products/:id
 func (h *ProductHandler) GetProductByID(c *gin.Context) {
-	idParam := c.Param("id")
-	id64, err := strconv.ParseUint(idParam, 10, 32)
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
 		return
 	}
-	id := uint(id64)
-
-	product, err := h.productUsecase.GetProductByID(id)
+	product, err := h.productService.GetProductByID(int32(id))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "product not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "Продукт не найден"})
 		return
 	}
-
 	c.JSON(http.StatusOK, product)
 }
 
+// UpdateProduct — PUT /products/:id
 func (h *ProductHandler) UpdateProduct(c *gin.Context) {
-	idParam := c.Param("id")
-	id64, err := strconv.ParseUint(idParam, 10, 32)
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
 		return
 	}
-	id := uint(id64)
-
 	var product models.Product
 	if err := c.ShouldBindJSON(&product); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	product.ID = id
-
-	err = h.productUsecase.UpdateProduct(&product)
-	if err != nil {
+	product.ID = int32(id)
+	if err := h.productService.UpdateProduct(&product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	c.JSON(http.StatusOK, product)
 }
 
+// DeleteProduct — DELETE /products/:id
 func (h *ProductHandler) DeleteProduct(c *gin.Context) {
-	idParam := c.Param("id")
-	id64, err := strconv.ParseUint(idParam, 10, 32)
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid id"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
 		return
 	}
-	id := uint(id64)
+	if err := h.productService.DeleteProduct(int32(id)); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "Продукт удалён"})
+}
 
-	err = h.productUsecase.DeleteProduct(id)
+// ListProducts — GET /products
+func (h *ProductHandler) ListProducts(c *gin.Context) {
+	products, err := h.productService.ListProducts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "product deleted"})
+	c.JSON(http.StatusOK, products)
 }
