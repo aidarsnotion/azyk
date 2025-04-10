@@ -17,7 +17,7 @@ type Product struct {
 	ResearchDate           time.Time              `gorm:"column:research_date" json:"research_date"`
 	CreatedAt              time.Time              `json:"created_at"`
 	UpdatedAt              time.Time              `json:"updated_at"`
-	ProductResearchSources []ResearchProject      `gorm:"foreignKey:ProductID" json:"product_research_sources"`
+	ProductResearchSources []ResearchProject      `gorm:"many2many:product_research_projects;" json:"product_research_sources"`
 	AminoAcidCompositions  []AminoAcidComposition `gorm:"foreignKey:ProductID" json:"amino_acid_compositions"`
 	MineralCompositions    []MineralComposition   `gorm:"foreignKey:ProductID" json:"mineral_compositions"`
 	ChemicalCompositions   []ChemicalComposition  `gorm:"foreignKey:ProductID" json:"chemical_compositions"`

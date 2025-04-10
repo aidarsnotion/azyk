@@ -112,7 +112,6 @@ func (r *Router) registerRoutes() {
 	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.GetProductByID).Methods("GET")
 	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.UpdateProduct).Methods("PUT")
 	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.DeleteProduct).Methods("DELETE")
-
 }
 
 // ServeHTTP реализует интерфейс http.

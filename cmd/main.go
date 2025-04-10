@@ -61,7 +61,23 @@ func main() {
 	db := util.InitDB()
 
 	// Автоматическая миграция моделей (при необходимости)
-	db.DB.AutoMigrate(&models.User{}, &models.Session{} /*, остальные модели... */)
+	db.DB.AutoMigrate(
+		&models.Organization{},
+		&models.User{},
+		&models.Session{},
+		&models.Product{},
+		&models.Category{},
+		&models.AminoAcidComposition{},
+		&models.ChemicalComposition{},
+		&models.MineralComposition{},
+		&models.FattyAcidComposition{},
+		&models.VitaminComposition{},
+		&models.ProductTranslation{},
+		&models.Region{},
+		&models.ResearchProject{},
+		&models.UnitModel{},
+		// добавь сюда другие модели по необходимости
+	)
 
 	// Инициализация слоёв: репозиторий, usecase и HTTP-обработчики
 	userRepo := repository.NewUserRepository(db.DB)
