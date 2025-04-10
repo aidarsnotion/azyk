@@ -22,6 +22,7 @@ type Router struct {
 	FattyHandler    *FattyAcidCompositionHandler
 	VitaminHandler  *VitaminCompositionHandler
 	ProductHandler  *ProductHandler
+	CategoryHandler *CategoryHandler
 }
 
 // Новый конструктор Router. Он принимает зависимости (usecase и обработчики)
@@ -38,6 +39,7 @@ func NewRouter(
 	FattyHandler *FattyAcidCompositionHandler,
 	VitaminHandler *VitaminCompositionHandler,
 	ProductHandler *ProductHandler,
+	CategoryHandler *CategoryHandler,
 ) *Router {
 	r := &Router{
 		mux:         mux.NewRouter(),
@@ -50,6 +52,7 @@ func NewRouter(
 		FattyHandler:    FattyHandler,
 		VitaminHandler:  VitaminHandler,
 		ProductHandler:  ProductHandler,
+		CategoryHandler: CategoryHandler,
 	}
 	r.registerRoutes()
 	return r
@@ -112,6 +115,13 @@ func (r *Router) registerRoutes() {
 	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.GetProductByID).Methods("GET")
 	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.UpdateProduct).Methods("PUT")
 	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.DeleteProduct).Methods("DELETE")
+
+	// Маршруты для категории
+	protected.HandleFunc("/category", r.CategoryHandler.Create).Methods("POST")
+	protected.HandleFunc("/category", r.CategoryHandler.List).Methods("GET")
+	protected.HandleFunc("/category/{id:[0-9]+}", r.CategoryHandler.GetByID).Methods("GET")
+	protected.HandleFunc("/category/{id:[0-9]+}", r.CategoryHandler.Update).Methods("PUT")
+	protected.HandleFunc("/category/{id:[0-9]+}", r.CategoryHandler.Delete).Methods("DELETE")
 }
 
 // ServeHTTP реализует интерфейс http.
