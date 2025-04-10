@@ -1,12 +1,14 @@
 package http
 
 import (
+	"azyk/util"
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 
 	"azyk/internal/domain/models"
 	"azyk/internal/usecase"
-	"github.com/gin-gonic/gin"
 )
 
 // ProductHandler обрабатывает HTTP‑запросы для работы с продуктами.
@@ -20,77 +22,77 @@ func NewProductHandler(productService usecase.ProductService) *ProductHandler {
 }
 
 // CreateProduct — POST /products
-func (h *ProductHandler) CreateProduct(c *gin.Context) {
+func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var product models.Product
-	if err := c.ShouldBindJSON(&product); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	if err := h.productService.CreateProduct(&product); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusCreated, product)
+	util.WriteJSON(w, http.StatusCreated, product)
 }
 
-// GetProductByID — GET /products/:id
-func (h *ProductHandler) GetProductByID(c *gin.Context) {
-	idStr := c.Param("id")
+// GetProductByID — GET /products/{id}
+func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) {
+	idStr := mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
+		http.Error(w, "Неверный формат id", http.StatusBadRequest)
 		return
 	}
 	product, err := h.productService.GetProductByID(int32(id))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Продукт не найден"})
+		http.Error(w, "Продукт не найден", http.StatusNotFound)
 		return
 	}
-	c.JSON(http.StatusOK, product)
+	util.WriteJSON(w, http.StatusOK, product)
 }
 
-// UpdateProduct — PUT /products/:id
-func (h *ProductHandler) UpdateProduct(c *gin.Context) {
-	idStr := c.Param("id")
+// UpdateProduct — PUT /products/{id}
+func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	idStr := mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
+		http.Error(w, "Неверный формат id", http.StatusBadRequest)
 		return
 	}
 	var product models.Product
-	if err := c.ShouldBindJSON(&product); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := json.NewDecoder(r.Body).Decode(&product); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	product.ID = int32(id)
 	if err := h.productService.UpdateProduct(&product); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, product)
+	util.WriteJSON(w, http.StatusOK, product)
 }
 
-// DeleteProduct — DELETE /products/:id
-func (h *ProductHandler) DeleteProduct(c *gin.Context) {
-	idStr := c.Param("id")
+// DeleteProduct — DELETE /products/{id}
+func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+	idStr := mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
+		http.Error(w, "Неверный формат id", http.StatusBadRequest)
 		return
 	}
 	if err := h.productService.DeleteProduct(int32(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Продукт удалён"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Продукт удалён"})
 }
 
 // ListProducts — GET /products
-func (h *ProductHandler) ListProducts(c *gin.Context) {
+func (h *ProductHandler) ListProducts(w http.ResponseWriter, r *http.Request) {
 	products, err := h.productService.ListProducts()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, products)
+	util.WriteJSON(w, http.StatusOK, products)
 }

@@ -3,7 +3,9 @@ package http
 import (
 	"azyk/internal/domain/models"
 	"azyk/internal/usecase"
-	"github.com/gin-gonic/gin"
+	"azyk/util"
+	"encoding/json"
+	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
 )
@@ -19,87 +21,87 @@ func NewAminoAcidCompositionHandler(svc usecase.AminoAcidCompositionService) *Am
 }
 
 // CreateComposition — POST /compositions/amino
-func (h *AminoAcidCompositionHandler) CreateComposition(c *gin.Context) {
-	var comp models.AminoAcidComposition
-	if err := c.ShouldBindJSON(&comp); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+func (h *AminoAcidCompositionHandler) CreateComposition(w http.ResponseWriter, r *http.Request) {
+	var composition models.AminoAcidComposition
+	if err := json.NewDecoder(r.Body).Decode(&composition); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	if err := h.service.Create(&comp); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if err := h.service.Create(&composition); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	c.JSON(http.StatusCreated, comp)
+	util.WriteJSON(w, http.StatusCreated, composition)
 }
 
 // GetCompositionByID — GET /compositions/amino/:id
-func (h *AminoAcidCompositionHandler) GetCompositionByID(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
+func (h *AminoAcidCompositionHandler) GetCompositionByID(w http.ResponseWriter, r *http.Request) {
+	idString := mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idString)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	comp, err := h.service.GetByID(int32(id))
+	composition, err := h.service.GetByID(int32(id))
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Состав не найден"})
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	c.JSON(http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, composition)
 }
 
 // UpdateComposition — PUT /compositions/amino/:id
-func (h *AminoAcidCompositionHandler) UpdateComposition(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
+func (h *AminoAcidCompositionHandler) UpdateComposition(w http.ResponseWriter, r *http.Request) {
+	idString := mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idString)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	var comp models.AminoAcidComposition
-	if err := c.ShouldBindJSON(&comp); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	var composition models.AminoAcidComposition
+	if err := json.NewDecoder(r.Body).Decode(&composition); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	comp.ID = int32(id)
-	if err := h.service.Update(&comp); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	composition.ID = int32(id)
+	if err := h.service.Update(&composition); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, composition)
 }
 
 // DeleteComposition — DELETE /compositions/amino/:id
-func (h *AminoAcidCompositionHandler) DeleteComposition(c *gin.Context) {
-	idStr := c.Param("id")
-	id, err := strconv.Atoi(idStr)
+func (h *AminoAcidCompositionHandler) DeleteComposition(w http.ResponseWriter, r *http.Request) {
+	idString := mux.Vars(r)["id"]
+	id, err := strconv.Atoi(idString)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат id"})
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 	if err := h.service.Delete(int32(id)); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "Состав удалён"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"result": "success"})
 }
 
 // ListCompositionsByProduct — GET /compositions/amino?product_id=...
-func (h *AminoAcidCompositionHandler) ListCompositionsByProduct(c *gin.Context) {
-	productIDStr := c.Query("product_id")
+func (h *AminoAcidCompositionHandler) ListCompositionsByProduct(w http.ResponseWriter, r *http.Request) {
+	productIDStr := r.URL.Query().Get("product_id")
 	if productIDStr == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Параметр product_id обязателен"})
+		http.Error(w, "Параметр product_id обязателен", http.StatusBadRequest)
 		return
 	}
 	productID, err := strconv.Atoi(productIDStr)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Неверный формат product_id"})
+		http.Error(w, "Неверный формат product_id", http.StatusBadRequest)
 		return
 	}
 	comps, err := h.service.ListByProduct(int32(productID))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, comps)
+	util.WriteJSON(w, http.StatusOK, comps)
 }

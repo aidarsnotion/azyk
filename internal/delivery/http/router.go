@@ -16,38 +16,42 @@ type Router struct {
 	UserUsecase usecase.UserUsecase
 	AuthUsecase auth.AuthUseCase
 
-	// Обработчики для составов
-	AminoHandler    usecase.AminoAcidCompositionService
-	ChemicalHandler usecase.ChemicalCompositionService
-	MineralHandler  usecase.MineralCompositionService
-	FattyHandler    usecase.FattyAcidCompositionService
-	VitaminHandler  usecase.VitaminCompositionService
-
-	// Можно добавить и другие обработчики, например для продуктов
+	AminoHandler    *AminoAcidCompositionHandler
+	ChemicalHandler *ChemicalCompositionHandler
+	MineralHandler  *MineralCompositionHandler
+	FattyHandler    *FattyAcidCompositionHandler
+	VitaminHandler  *VitaminCompositionHandler
+	ProductHandler  *ProductHandler
 }
 
 // Новый конструктор Router. Он принимает зависимости (usecase и обработчики)
 // и регистрирует маршруты.
 func NewRouter(
+	// юзкейсы
 	userUsecase usecase.UserUsecase,
 	authUsecase auth.AuthUseCase,
-	aminoHandler usecase.AminoAcidCompositionService,
-	chemicalHandler usecase.ChemicalCompositionService,
-	mineralHandler usecase.MineralCompositionService,
-	fattyHandler usecase.FattyAcidCompositionService,
-	vitaminHandler usecase.VitaminCompositionService,
+
+	// обработчики
+	AminoHandler *AminoAcidCompositionHandler,
+	ChemicalHandler *ChemicalCompositionHandler,
+	MineralHandler *MineralCompositionHandler,
+	FattyHandler *FattyAcidCompositionHandler,
+	VitaminHandler *VitaminCompositionHandler,
+	ProductHandler *ProductHandler,
 ) *Router {
 	r := &Router{
-		mux:             mux.NewRouter(),
-		UserUsecase:     userUsecase,
-		AuthUsecase:     authUsecase,
-		AminoHandler:    aminoHandler,
-		ChemicalHandler: chemicalHandler,
-		MineralHandler:  mineralHandler,
-		FattyHandler:    fattyHandler,
-		VitaminHandler:  vitaminHandler,
+		mux:         mux.NewRouter(),
+		UserUsecase: userUsecase,
+		AuthUsecase: authUsecase,
+
+		AminoHandler:    AminoHandler,
+		ChemicalHandler: ChemicalHandler,
+		MineralHandler:  MineralHandler,
+		FattyHandler:    FattyHandler,
+		VitaminHandler:  VitaminHandler,
+		ProductHandler:  ProductHandler,
 	}
-	r.registerRoutes() // Регистрируем маршруты
+	r.registerRoutes()
 	return r
 }
 
@@ -75,32 +79,40 @@ func (r *Router) registerRoutes() {
 	protected.HandleFunc("/compositions/amino/{id:[0-9]+}", r.AminoHandler.DeleteComposition).Methods("DELETE")
 
 	// Маршруты для химического состава
-	protected.HandleFunc("/compositions/chemical", r.ChemicalCreateComposition).Methods("POST")
-	protected.HandleFunc("/compositions/chemical", r.ChemicalListCompositionsByProduct).Methods("GET")
-	protected.HandleFunc("/compositions/chemical/{id:[0-9]+}", r.ChemicalGetCompositionByID).Methods("GET")
-	protected.HandleFunc("/compositions/chemical/{id:[0-9]+}", r.ChemicalUpdateComposition).Methods("PUT")
-	protected.HandleFunc("/compositions/chemical/{id:[0-9]+}", r.ChemicalDeleteComposition).Methods("DELETE")
+	protected.HandleFunc("/compositions/chemical", r.ChemicalHandler.CreateComposition).Methods("POST")
+	protected.HandleFunc("/compositions/chemical", r.ChemicalHandler.ListCompositionsByProduct).Methods("GET")
+	protected.HandleFunc("/compositions/chemical/{id:[0-9]+}", r.ChemicalHandler.GetCompositionByID).Methods("GET")
+	protected.HandleFunc("/compositions/chemical/{id:[0-9]+}", r.ChemicalHandler.UpdateComposition).Methods("PUT")
+	protected.HandleFunc("/compositions/chemical/{id:[0-9]+}", r.ChemicalHandler.DeleteComposition).Methods("DELETE")
 
 	// Маршруты для минерального состава
-	protected.HandleFunc("/compositions/mineral", r.MineralCreateComposition).Methods("POST")
-	protected.HandleFunc("/compositions/mineral", r.MineralListCompositionsByProduct).Methods("GET")
-	protected.HandleFunc("/compositions/mineral/{id:[0-9]+}", r.MineralGetCompositionByID).Methods("GET")
-	protected.HandleFunc("/compositions/mineral/{id:[0-9]+}", r.MineralUpdateComposition).Methods("PUT")
-	protected.HandleFunc("/compositions/mineral/{id:[0-9]+}", r.MineralDeleteComposition).Methods("DELETE")
+	protected.HandleFunc("/compositions/mineral", r.MineralHandler.CreateComposition).Methods("POST")
+	protected.HandleFunc("/compositions/mineral", r.MineralHandler.ListCompositionsByProduct).Methods("GET")
+	protected.HandleFunc("/compositions/mineral/{id:[0-9]+}", r.MineralHandler.GetCompositionByID).Methods("GET")
+	protected.HandleFunc("/compositions/mineral/{id:[0-9]+}", r.MineralHandler.UpdateComposition).Methods("PUT")
+	protected.HandleFunc("/compositions/mineral/{id:[0-9]+}", r.MineralHandler.DeleteComposition).Methods("DELETE")
 
 	// Маршруты для состава жирных кислот
-	protected.HandleFunc("/compositions/fatty", r.FattyCreateComposition).Methods("POST")
-	protected.HandleFunc("/compositions/fatty", r.FattyListCompositionsByProduct).Methods("GET")
-	protected.HandleFunc("/compositions/fatty/{id:[0-9]+}", r.FattyGetCompositionByID).Methods("GET")
-	protected.HandleFunc("/compositions/fatty/{id:[0-9]+}", r.FattyUpdateComposition).Methods("PUT")
-	protected.HandleFunc("/compositions/fatty/{id:[0-9]+}", r.FattyDeleteComposition).Methods("DELETE")
+	protected.HandleFunc("/compositions/fatty", r.FattyHandler.CreateComposition).Methods("POST")
+	protected.HandleFunc("/compositions/fatty", r.FattyHandler.ListCompositionsByProduct).Methods("GET")
+	protected.HandleFunc("/compositions/fatty/{id:[0-9]+}", r.FattyHandler.GetCompositionByID).Methods("GET")
+	protected.HandleFunc("/compositions/fatty/{id:[0-9]+}", r.FattyHandler.UpdateComposition).Methods("PUT")
+	protected.HandleFunc("/compositions/fatty/{id:[0-9]+}", r.FattyHandler.DeleteComposition).Methods("DELETE")
 
 	// Маршруты для витаминов
-	protected.HandleFunc("/compositions/vitamin", r.VitaminCreateComposition).Methods("POST")
-	protected.HandleFunc("/compositions/vitamin", r.VitaminListCompositionsByProduct).Methods("GET")
-	protected.HandleFunc("/compositions/vitamin/{id:[0-9]+}", r.VitaminGetCompositionByID).Methods("GET")
-	protected.HandleFunc("/compositions/vitamin/{id:[0-9]+}", r.VitaminUpdateComposition).Methods("PUT")
-	protected.HandleFunc("/compositions/vitamin/{id:[0-9]+}", r.VitaminDeleteComposition).Methods("DELETE")
+	protected.HandleFunc("/compositions/vitamin", r.VitaminHandler.CreateComposition).Methods("POST")
+	protected.HandleFunc("/compositions/vitamin", r.VitaminHandler.ListCompositionsByProduct).Methods("GET")
+	protected.HandleFunc("/compositions/vitamin/{id:[0-9]+}", r.VitaminHandler.GetCompositionByID).Methods("GET")
+	protected.HandleFunc("/compositions/vitamin/{id:[0-9]+}", r.VitaminHandler.UpdateComposition).Methods("PUT")
+	protected.HandleFunc("/compositions/vitamin/{id:[0-9]+}", r.VitaminHandler.DeleteComposition).Methods("DELETE")
+
+	// Маршруты для продуктов
+	protected.HandleFunc("/product", r.ProductHandler.CreateProduct).Methods("POST")
+	protected.HandleFunc("/product", r.ProductHandler.ListProducts).Methods("GET")
+	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.GetProductByID).Methods("GET")
+	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.UpdateProduct).Methods("PUT")
+	protected.HandleFunc("/product/{id:[0-9]+}", r.ProductHandler.DeleteProduct).Methods("DELETE")
+
 }
 
 // ServeHTTP реализует интерфейс http.
