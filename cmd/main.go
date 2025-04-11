@@ -110,5 +110,5 @@ func main() {
 	router := httpDelivery.NewRouter(userUC, authUC, aminoHandler, chemicalHandler, mineralHandler, fattyHandler, vitaminHandler, productHandler, categoryHandler, regionHandler)
 
 	// Запуск сервера
-	httpDelivery.StartServer(router, ":8080")
+	httpDelivery.StartServer(router, cfg.GetServerPort())
 }

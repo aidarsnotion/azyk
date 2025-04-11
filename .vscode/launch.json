@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Main",
+      "type": "go",
+      "request": "launch",
+      "mode": "auto",
+      "program": "${workspaceFolder}/cmd",        // путь к main.go
+      "envFile": "${workspaceFolder}/.env",       // путь к .env
+      "env": {
+        "GO_ENV": "development"                   // можно указать свои доп. переменные
+      }
+    }
+  ]
+}

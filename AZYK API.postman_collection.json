@@ -1,0 +1,1704 @@
+{
+	"info": {
+		"_postman_id": "3b81ac96-84ae-4f74-afc2-cce2afe32adf",
+		"name": "AZYK API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19565032",
+		"_collection_link": "https://aidarsnotion.postman.co/workspace/Azyk~acce0779-d889-4865-83d1-8c15a118b82d/collection/19565032-3b81ac96-84ae-4f74-afc2-cce2afe32adf?action=share&source=collection_link&creator=19565032"
+	},
+	"item": [
+		{
+			"name": "Amino",
+			"item": [
+				{
+					"name": "POST /compositions/amino",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/amino",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"amino"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /compositions/amino",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/amino?product_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"amino"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /compositions/amino/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/amino/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"amino",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /compositions/amino/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/amino/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"amino",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /compositions/amino/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/amino/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"amino",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chemical",
+			"item": [
+				{
+					"name": "POST /compositions/chemical",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/chemical",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"chemical"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /compositions/chemical",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/chemical?product_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"chemical"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /compositions/chemical/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/chemical/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"chemical",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /compositions/chemical/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/chemical/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"chemical",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /compositions/chemical/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/chemical/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"chemical",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mineral",
+			"item": [
+				{
+					"name": "POST /compositions/mineral",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/mineral",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"mineral"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /compositions/mineral",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/mineral?product_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"mineral"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /compositions/mineral/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/mineral/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"mineral",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /compositions/mineral/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/mineral/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"mineral",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /compositions/mineral/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/mineral/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"mineral",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fatty",
+			"item": [
+				{
+					"name": "POST /compositions/fatty",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/fatty",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"fatty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /compositions/fatty",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/fatty?product_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"fatty"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /compositions/fatty/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/fatty/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"fatty",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /compositions/fatty/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/fatty/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"fatty",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /compositions/fatty/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/fatty/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"fatty",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Vitamin",
+			"item": [
+				{
+					"name": "POST /compositions/vitamin",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/vitamin",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"vitamin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /compositions/vitamin",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/vitamin?product_id=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"vitamin"
+							],
+							"query": [
+								{
+									"key": "product_id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /compositions/vitamin/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/vitamin/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"vitamin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /compositions/vitamin/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/compositions/vitamin/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"vitamin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /compositions/vitamin/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/compositions/vitamin/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"compositions",
+								"vitamin",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "POST /products",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name\": \"Test Product\",\n    \"regions_id\": 1,\n    \"region\": {\n        \"id\": 1\n    },\n    \"national\": true,\n    \"description\": \"test\",\n    \"research_date\": \"2025-04-10T11:53:00Z\",\n    \"created_at\": \"2025-04-10T11:53:00Z\",\n    \"updated_at\": \"2025-04-10T11:53:00Z\",\n    \"categories\": {\n        \"id\": 1\n    }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/product",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /products",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/product",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /products/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/product/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"product",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /products/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/product/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"product",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /products/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/product/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"product",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "POST /categorys",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 1,\n    \"name_of_category\": \"test\",\n    \"regions_id\": 1,\n    \"region\": {\n        \"id\": 1\n    }\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/category",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /categorys",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/category",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /categorys/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/category/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /categorys/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/category/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /categorys/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/category/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Region",
+			"item": [
+				{
+					"name": "POST /regions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/region",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"region"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /regions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/region",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"region"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /regions/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/region/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"region",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /regions/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"code\": \"new_test_code\",\n    \"name\": \"New Test Region\",\n    \"level\": 1,\n    \"parent_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/region/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"region",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /regions/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/region/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"region",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Organization",
+			"item": [
+				{
+					"name": "POST /organizations",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/organization",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /organizations",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/organization",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"organization"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /organizations/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/organization/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /organizations/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/organization/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /organizations/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/organization/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"organization",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Research_project",
+			"item": [
+				{
+					"name": "POST /research_projects",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/research_project",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"research_project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET /research_projects",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/research_project",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"research_project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET_ONE /research_projects/{id}",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/research_project/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"research_project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT /research_projects/{id}",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"example\": \"value\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/api/research_project/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"research_project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE /research_projects/{id}",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/research_project/:id",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"research_project",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"aidar\",\r\n    \"email\": \"aidar.ernisov01@gmail.com\",\r\n    \"Password\": \"Qwerty123$\",\r\n    \"Role\": \"Admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"aidar.ernisov01@gmail.com\",\r\n    \"password\": \"Qwerty123$\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/users/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/users/logout/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"logout",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getuser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NDQ0NDg2MzksImlhdCI6MTc0NDM2MjIzOX0.yONk3Tg64cDrhh2f2B0Nu1o47MFe4_YZnZigGBume5g",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/users/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJyb2xlIjoiQWRtaW4iLCJleHAiOjE3NDQ0NjU0MjEsImlhdCI6MTc0NDM3OTAyMX0.LKge9TW2rZbrlp-0j-U7DglLweTki6GiuIersERm29k",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}
