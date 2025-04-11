@@ -1,7 +1,5 @@
 package models
 
-import "time"
-
 type UserRole string
 
 const (
@@ -13,16 +11,15 @@ const (
 	RoleCorporateAdmin UserRole = "CorporateAdmin"
 )
 
-// Пользователь
+// User представляет пользователя.
 type User struct {
-	ID        int       `gorm:"primaryKey" json:"id"`
-	Name      string    `gorm:"size:255" json:"name"`
-	Email     string    `gorm:"unique;size:255" json:"email"`
-	Password  string    `gorm:"size:255" json:"-"`
-	Role      UserRole  `gorm:"size:50" json:"role"`
-	OrgID     *int      `json:"org_id,omitempty"` // Ссылка на организацию
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	ID       int      `gorm:"primaryKey" json:"id"`
+	Name     string   `gorm:"size:255;not null" json:"name"`
+	Email    string   `gorm:"unique;size:255;not null" json:"email"`
+	Password string   `gorm:"size:255" json:"-"`
+	Role     UserRole `gorm:"size:50" json:"role"`
+	OrgID    *int     `json:"org_id,omitempty"`
+	BaseModel
 }
 
 type CreateUserRequest struct {
@@ -30,7 +27,7 @@ type CreateUserRequest struct {
 	Email    string   `json:"email" validate:"required,email"`
 	Password string   `json:"password" validate:"required,min=6"`
 	Role     UserRole `json:"role" validate:"required"`
-	OrgID    *int     `json:"org_id,omitempty"` // Только для корпоративных пользователей
+	OrgID    *int     `json:"org_id,omitempty"`
 }
 
 type UpdateUserRequest struct {

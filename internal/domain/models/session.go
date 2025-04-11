@@ -5,16 +5,14 @@ import (
 	"time"
 )
 
-// Сессия пользователя
 type Session struct {
 	ID        int       `gorm:"primaryKey" json:"id"`
-	UserID    int       `json:"user_id"`
-	DeviceID  string    `gorm:"size:255" json:"device_id"`
+	UserID    int       `gorm:"index;not null" json:"user_id"`
+	DeviceID  string    `gorm:"size:255;not null" json:"device_id"`
 	CreatedAt time.Time `json:"created_at"`
 	ExpiresAt time.Time `json:"expires_at"`
 }
 
-// JWT Claims
 type Claims struct {
 	UserID int      `json:"user_id"`
 	Role   UserRole `json:"role"`

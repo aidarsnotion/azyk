@@ -88,7 +88,7 @@ func (h *AminoAcidCompositionHandler) DeleteComposition(w http.ResponseWriter, r
 
 // ListCompositionsByProduct — GET /compositions/amino?product_id=...
 func (h *AminoAcidCompositionHandler) ListCompositionsByProduct(w http.ResponseWriter, r *http.Request) {
-	productIDStr := r.URL.Query().Get("product_id")
+	productIDStr := r.URL.Query().Get("")
 	if productIDStr == "" {
 		http.Error(w, "Параметр product_id обязателен", http.StatusBadRequest)
 		return
