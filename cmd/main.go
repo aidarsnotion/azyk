@@ -19,7 +19,8 @@ func initializeHandlers(db *util.Database) (*httpDelivery.AminoAcidCompositionHa
 	*httpDelivery.MineralCompositionHandler,
 	*httpDelivery.ProductHandler,
 	*httpDelivery.VitaminCompositionHandler,
-	*httpDelivery.CategoryHandler) {
+	*httpDelivery.CategoryHandler,
+	*httpDelivery.RegionHandler) {
 
 	// Репозитории
 	aminoRepo := repository.NewAminoAcidCompositionRepository(db.DB)
@@ -29,6 +30,7 @@ func initializeHandlers(db *util.Database) (*httpDelivery.AminoAcidCompositionHa
 	productRepo := repository.NewProductRepository(db.DB)
 	vitaminRepo := repository.NewVitaminCompositionRepository(db.DB)
 	categoryRepo := repository.NewCategoryRepository(db.DB)
+	regionRepo := repository.NewRegionRepository(db.DB)
 
 	// UseCases (сервисы бизнес-логики)
 	aminoSvc := usecase.NewAminoAcidCompositionService(aminoRepo)
@@ -38,6 +40,7 @@ func initializeHandlers(db *util.Database) (*httpDelivery.AminoAcidCompositionHa
 	productSvc := usecase.NewProductService(productRepo)
 	vitaminSvc := usecase.NewVitaminCompositionService(vitaminRepo)
 	categorySvc := usecase.NewCategoryUsecase(categoryRepo)
+	regionSvc := usecase.NewRegionUsecase(regionRepo)
 
 	// Хендлеры (обработчики HTTP)
 	aminoHandler := httpDelivery.NewAminoAcidCompositionHandler(aminoSvc)
@@ -47,8 +50,9 @@ func initializeHandlers(db *util.Database) (*httpDelivery.AminoAcidCompositionHa
 	productHandler := httpDelivery.NewProductHandler(productSvc)
 	vitaminHandler := httpDelivery.NewVitaminCompositionHandler(vitaminSvc)
 	categoryHandler := httpDelivery.NewCategoryHandler(categorySvc)
+	regionHandler := httpDelivery.NewRegionHandler(regionSvc)
 
-	return aminoHandler, chemicalHandler, fattyHandler, mineralHandler, productHandler, vitaminHandler, categoryHandler
+	return aminoHandler, chemicalHandler, fattyHandler, mineralHandler, productHandler, vitaminHandler, categoryHandler, regionHandler
 }
 
 func main() {
@@ -92,10 +96,10 @@ func main() {
 	authUC := auth.NewAuthUseCase(userRepo, sessionRepo, throttler)
 
 	// Инициализация дополнительных usecase и handler'ов
-	aminoHandler, chemicalHandler, fattyHandler, mineralHandler, productHandler, vitaminHandler, categoryHandler := initializeHandlers(db)
+	aminoHandler, chemicalHandler, fattyHandler, mineralHandler, productHandler, vitaminHandler, categoryHandler, regionHandler := initializeHandlers(db)
 
 	// Создаём роутер с зарегистрированными маршрутами (HTTP-обработчики)
-	router := httpDelivery.NewRouter(userUC, authUC, aminoHandler, chemicalHandler, mineralHandler, fattyHandler, vitaminHandler, productHandler, categoryHandler)
+	router := httpDelivery.NewRouter(userUC, authUC, aminoHandler, chemicalHandler, mineralHandler, fattyHandler, vitaminHandler, productHandler, categoryHandler, regionHandler)
 
 	// Запуск сервера
 	httpDelivery.StartServer(router, ":8080")

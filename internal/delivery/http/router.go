@@ -23,6 +23,7 @@ type Router struct {
 	VitaminHandler  *VitaminCompositionHandler
 	ProductHandler  *ProductHandler
 	CategoryHandler *CategoryHandler
+	RegionHandler   *RegionHandler
 }
 
 // Новый конструктор Router. Он принимает зависимости (usecase и обработчики)
@@ -40,6 +41,7 @@ func NewRouter(
 	VitaminHandler *VitaminCompositionHandler,
 	ProductHandler *ProductHandler,
 	CategoryHandler *CategoryHandler,
+	RegionHandler *RegionHandler,
 ) *Router {
 	r := &Router{
 		mux:         mux.NewRouter(),
@@ -53,6 +55,7 @@ func NewRouter(
 		VitaminHandler:  VitaminHandler,
 		ProductHandler:  ProductHandler,
 		CategoryHandler: CategoryHandler,
+		RegionHandler:   RegionHandler,
 	}
 	r.registerRoutes()
 	return r
