@@ -145,18 +145,32 @@ go run ./cmd/main.go
 Проверить в браузере или через curl:
 
 ```bash
-curl http://localhost:8080/products
+curl -X POST http://localhost:8080/users/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "username",
+    "email": "admin@example.com",
+    "Password": "Qwerty123$",
+    "Role": "Admin"
+}'
+
 ```
 При первом запуске GORM автоматически выполнит миграции (если это настроено в main.go).
 
 ## Переменные окружения:
-| Переменная | Описание                         | Пример значения       |
-|------------|----------------------------------|-----------------------|
-| DB_HOST    | Адрес хоста базы данных          | localhost или db      |
-| DB_PORT    | Порт подключения к PostgreSQL    | 5432                  |
-| DB_USER    | Имя пользователя БД              | postgres              |
-| DB_PASS    | Пароль пользователя БД           | secret                |
-| DB_NAME    | Название базы данных             | myfooddb              |
+
+| Переменная            | Описание                                | Пример значения       |
+|-----------------------|------------------------------------------|------------------------|
+| SERVER_PORT           | Порт, на котором запускается сервер      | 8080                   |
+| DATABASE_HOST         | Адрес хоста базы данных PostgreSQL       | localhost или db       |
+| DATABASE_PORT         | Порт подключения к PostgreSQL            | 5432                   |
+| DATABASE_USER         | Имя пользователя базы данных             | azyk                   |
+| DATABASE_PASSWORD     | Пароль пользователя базы данных          | azyk                   |
+| DATABASE_NAME         | Название базы данных                     | azyk                   |
+| DATABASE_SSLMODE      | Режим SSL-соединения с БД                | disable                |
+| MAX_LOGIN_ATTEMPTS    | Максимальное количество попыток входа    | 5                      |
+| LOGIN_ATTEMPT_WINDOW  | Временное окно блокировки (например, при превышении лимита попыток) | 15m                    |
+
 
 ## Примеры API-запросов
 
