@@ -5,6 +5,8 @@ import (
 	"context"
 	"net/http"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 type contextKey string
@@ -12,6 +14,7 @@ type contextKey string
 const (
 	ContextUserID = contextKey("user_id")
 	ContextRole   = contextKey("role")
+	ContextReqKey = contextKey("reqKey")
 )
 
 // Middleware для проверки JWT токена
@@ -41,6 +44,12 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		ctx := context.WithValue(r.Context(), ContextUserID, claims.UserID)
 		ctx = context.WithValue(ctx, ContextRole, claims.Role)
 
+		//req id  потом отделить в другой пакет
+		id, _ := uuid.NewUUID()
+		ctx = context.WithValue(r.Context(), ContextReqKey, id.String())
+		//log.SetReqId(id.String())
+
+		w.Header().Set("Content-Type", "application/json")
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

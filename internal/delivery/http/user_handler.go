@@ -2,9 +2,10 @@ package http
 
 import (
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 
 	"azyk/internal/domain/models"
 	"azyk/util/logger"

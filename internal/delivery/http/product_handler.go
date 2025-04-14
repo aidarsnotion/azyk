@@ -3,9 +3,10 @@ package http
 import (
 	"azyk/util"
 	"encoding/json"
-	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
+
+	"github.com/gorilla/mux"
 
 	"azyk/internal/domain/models"
 	"azyk/internal/usecase"
@@ -29,7 +30,7 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.productService.CreateProduct(&product); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		util.WriteJSON(w, http.StatusCreated, err.Error())
 		return
 	}
 	util.WriteJSON(w, http.StatusCreated, product)
