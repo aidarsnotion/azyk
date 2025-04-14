@@ -124,11 +124,15 @@ go mod download
 ```
 Настроить переменные окружения (или Docker Compose). Пример:
 ```bash
-export DB_HOST=localhost
-export DB_PORT=5432
-export DB_USER=postgres
-export DB_PASS=secret
-export DB_NAME=myfooddb
+SERVER_PORT: "8080"
+DATABASE_HOST: "localhost"
+DATABASE_PORT: "5432"
+DATABASE_USER: "azyk"
+DATABASE_PASSWORD: "azyk"
+DATABASE_NAME: "azyk"
+DATABASE_SSLMODE: "disable"
+MAX_LOGIN_ATTEMPTS: "5"
+LOGIN_ATTEMPT_WINDOW: "15m"
 ```
 Или создать файл .env и загрузить его.
 
