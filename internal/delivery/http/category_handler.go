@@ -28,7 +28,7 @@ func (h *CategoryHandler) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, category)
+	util.WriteJSON(w, http.StatusCreated, category, r.URL.Query().Get("REQUEST_ID"))
 }
 
 func (h *CategoryHandler) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -43,7 +43,7 @@ func (h *CategoryHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Категория не найдена", http.StatusNotFound)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, category)
+	util.WriteJSON(w, http.StatusOK, category, r.URL.Query().Get("REQUEST_ID"))
 }
 
 func (h *CategoryHandler) List(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +52,7 @@ func (h *CategoryHandler) List(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, categories)
+	util.WriteJSON(w, http.StatusOK, categories, r.URL.Query().Get("REQUEST_ID"))
 }
 
 func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +72,7 @@ func (h *CategoryHandler) Update(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, category)
+	util.WriteJSON(w, http.StatusOK, category, r.URL.Query().Get("REQUEST_ID"))
 }
 
 func (h *CategoryHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -86,5 +86,5 @@ func (h *CategoryHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Категория удалена"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Категория удалена"}, r.URL.Query().Get("REQUEST_ID"))
 }

@@ -31,7 +31,7 @@ func (h *ChemicalCompositionHandler) CreateComposition(w http.ResponseWriter, r 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, comp)
+	util.WriteJSON(w, http.StatusCreated, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // GetCompositionByID — GET /compositions/chemical/{id}
@@ -47,7 +47,7 @@ func (h *ChemicalCompositionHandler) GetCompositionByID(w http.ResponseWriter, r
 		http.Error(w, "Запись не найдена", http.StatusNotFound)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // UpdateComposition — PUT /compositions/chemical/{id}
@@ -68,7 +68,7 @@ func (h *ChemicalCompositionHandler) UpdateComposition(w http.ResponseWriter, r 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // DeleteComposition — DELETE /compositions/chemical/{id}
@@ -83,7 +83,7 @@ func (h *ChemicalCompositionHandler) DeleteComposition(w http.ResponseWriter, r 
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Запись удалена"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Запись удалена"}, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // ListCompositionsByProduct — GET /compositions/chemical?product_id=...
@@ -103,5 +103,5 @@ func (h *ChemicalCompositionHandler) ListCompositionsByProduct(w http.ResponseWr
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comps)
+	util.WriteJSON(w, http.StatusOK, comps, r.URL.Query().Get("REQUEST_ID"))
 }

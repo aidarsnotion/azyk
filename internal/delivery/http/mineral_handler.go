@@ -31,7 +31,7 @@ func (h *MineralCompositionHandler) CreateComposition(w http.ResponseWriter, r *
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, comp)
+	util.WriteJSON(w, http.StatusCreated, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // GetCompositionByID — GET /compositions/mineral/{id}
@@ -47,7 +47,7 @@ func (h *MineralCompositionHandler) GetCompositionByID(w http.ResponseWriter, r 
 		http.Error(w, "Запись не найдена", http.StatusNotFound)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // UpdateComposition — PUT /compositions/mineral/{id}
@@ -68,7 +68,7 @@ func (h *MineralCompositionHandler) UpdateComposition(w http.ResponseWriter, r *
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // DeleteComposition — DELETE /compositions/mineral/{id}
@@ -83,7 +83,7 @@ func (h *MineralCompositionHandler) DeleteComposition(w http.ResponseWriter, r *
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Запись удалена"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Запись удалена"}, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // ListCompositionsByProduct — GET /compositions/mineral?product_id=...
@@ -103,5 +103,5 @@ func (h *MineralCompositionHandler) ListCompositionsByProduct(w http.ResponseWri
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comps)
+	util.WriteJSON(w, http.StatusOK, comps, r.URL.Query().Get("REQUEST_ID"))
 }

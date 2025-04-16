@@ -31,7 +31,7 @@ func (h *FattyAcidCompositionHandler) CreateComposition(w http.ResponseWriter, r
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, comp)
+	util.WriteJSON(w, http.StatusCreated, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // GetCompositionByID — GET /compositions/fatty/{id}
@@ -47,7 +47,7 @@ func (h *FattyAcidCompositionHandler) GetCompositionByID(w http.ResponseWriter, 
 		http.Error(w, "Запись не найдена", http.StatusNotFound)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // UpdateComposition — PUT /compositions/fatty/{id}
@@ -68,7 +68,7 @@ func (h *FattyAcidCompositionHandler) UpdateComposition(w http.ResponseWriter, r
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comp)
+	util.WriteJSON(w, http.StatusOK, comp, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // DeleteComposition — DELETE /compositions/fatty/{id}
@@ -83,7 +83,7 @@ func (h *FattyAcidCompositionHandler) DeleteComposition(w http.ResponseWriter, r
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Запись удалена"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Запись удалена"}, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // ListCompositionsByProduct — GET /compositions/fatty?product_id=...
@@ -103,5 +103,5 @@ func (h *FattyAcidCompositionHandler) ListCompositionsByProduct(w http.ResponseW
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comps)
+	util.WriteJSON(w, http.StatusOK, comps, r.URL.Query().Get("REQUEST_ID"))
 }

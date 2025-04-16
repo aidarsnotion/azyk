@@ -8,7 +8,6 @@ import (
 	"log"
 
 	httpDelivery "azyk/internal/delivery/http"
-	"azyk/internal/domain/models"
 	"azyk/internal/domain/repository"
 	"azyk/internal/usecase"
 )
@@ -68,32 +67,8 @@ func main() {
 	// Подключение к базе данных
 	db := util.InitDB()
 
-	db.DB.AutoMigrate(
-		&models.Organization{},
-		&models.OrganizationTranslation{},
-		&models.User{},
-		&models.Session{},
-		&models.Product{},
-		&models.ProductTranslation{},
-		&models.Category{},
-		&models.CategoryTranslation{},
-		&models.AminoAcidComposition{},
-		&models.AminoAcidTranslation{},
-		&models.ChemicalComposition{},
-		&models.ChemicalTranslation{},
-		&models.MineralComposition{},
-		&models.FattyAcidComposition{},
-		&models.FattyType{},
-		&models.FattyTypeTranslation{},
-		&models.VitaminComposition{},
-		&models.VitaminTranslation{},
-		&models.Region{},
-		&models.RegionTranslation{},
-		&models.ResearchProject{},
-		&models.ResearchTranslation{},
-		&models.UnitModel{},
-		&models.UnitTranslation{},
-	)
+	//Выполнеие миграций
+	util.RunMigrations(db.DB)
 
 	// Инициализация слоёв: репозиторий, usecase и HTTP-обработчики
 	userRepo := repository.NewUserRepository(db.DB)

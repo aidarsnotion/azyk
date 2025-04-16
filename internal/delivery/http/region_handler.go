@@ -2,6 +2,7 @@ package http
 
 import (
 	"azyk/internal/domain/models"
+	"azyk/internal/domain/requestbody"
 	"azyk/internal/usecase"
 	"azyk/util"
 	"encoding/json"
@@ -19,16 +20,27 @@ func NewRegionHandler(uc usecase.RegionUsecase) *RegionHandler {
 }
 
 func (h *RegionHandler) Create(w http.ResponseWriter, r *http.Request) {
-	var region models.Region
-	if err := json.NewDecoder(r.Body).Decode(&region); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+	var req requestbody.RequestWithPayload[models.Region]
+
+	// Чтение JSON и валидация
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		util.WriteJSON(w, http.StatusBadRequest, err.Error(), req.RequestID)
 		return
 	}
-	if err := h.usecase.Create(&region); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+
+	if err := util.ValidateStruct(req); err != nil {
+		util.WriteJSON(w, http.StatusBadRequest, err.Error(), req.RequestID)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, region)
+
+	// Обработка
+	if err := h.usecase.Create(&req.Data); err != nil {
+		util.WriteJSON(w, http.StatusInternalServerError, err.Error(), req.RequestID)
+		return
+	}
+
+	// Успешный ответ
+	util.WriteJSON(w, http.StatusCreated, req.Data, req.RequestID)
 }
 
 func (h *RegionHandler) GetByID(w http.ResponseWriter, r *http.Request) {
@@ -43,16 +55,17 @@ func (h *RegionHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Регион не найден", http.StatusNotFound)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, region)
+	util.WriteJSON(w, http.StatusOK, region, idStr)
 }
 
 func (h *RegionHandler) List(w http.ResponseWriter, r *http.Request) {
+	idStr := mux.Vars(r)["id"]
 	regions, err := h.usecase.List()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, regions)
+	util.WriteJSON(w, http.StatusOK, regions, idStr)
 }
 
 func (h *RegionHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +85,7 @@ func (h *RegionHandler) Update(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, region)
+	util.WriteJSON(w, http.StatusOK, region, idStr)
 }
 
 func (h *RegionHandler) Delete(w http.ResponseWriter, r *http.Request) {
@@ -86,5 +99,5 @@ func (h *RegionHandler) Delete(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Регион удалён"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Регион удалён"}, idStr)
 }

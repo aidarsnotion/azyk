@@ -31,7 +31,7 @@ func (h *AminoAcidCompositionHandler) CreateComposition(w http.ResponseWriter, r
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, composition)
+	util.WriteJSON(w, http.StatusCreated, composition, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // GetCompositionByID — GET /compositions/amino/:id
@@ -47,7 +47,7 @@ func (h *AminoAcidCompositionHandler) GetCompositionByID(w http.ResponseWriter, 
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, composition)
+	util.WriteJSON(w, http.StatusOK, composition, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // UpdateComposition — PUT /compositions/amino/:id
@@ -68,7 +68,7 @@ func (h *AminoAcidCompositionHandler) UpdateComposition(w http.ResponseWriter, r
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, composition)
+	util.WriteJSON(w, http.StatusOK, composition, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // DeleteComposition — DELETE /compositions/amino/:id
@@ -83,7 +83,7 @@ func (h *AminoAcidCompositionHandler) DeleteComposition(w http.ResponseWriter, r
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"result": "success"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"result": "success"}, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // ListCompositionsByProduct — GET /compositions/amino?product_id=...
@@ -103,5 +103,5 @@ func (h *AminoAcidCompositionHandler) ListCompositionsByProduct(w http.ResponseW
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, comps)
+	util.WriteJSON(w, http.StatusOK, comps, r.URL.Query().Get("REQUEST_ID"))
 }

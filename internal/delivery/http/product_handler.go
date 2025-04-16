@@ -30,10 +30,10 @@ func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := h.productService.CreateProduct(&product); err != nil {
-		util.WriteJSON(w, http.StatusCreated, err.Error())
+		util.WriteJSON(w, http.StatusCreated, err.Error(), r.Method)
 		return
 	}
-	util.WriteJSON(w, http.StatusCreated, product)
+	util.WriteJSON(w, http.StatusCreated, product, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // GetProductByID — GET /products/{id}
@@ -49,7 +49,7 @@ func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) 
 		http.Error(w, "Продукт не найден", http.StatusNotFound)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, product)
+	util.WriteJSON(w, http.StatusOK, product, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // UpdateProduct — PUT /products/{id}
@@ -70,7 +70,7 @@ func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, product)
+	util.WriteJSON(w, http.StatusOK, product, r.URL.Query().Get("REQUEST_ID"))
 }
 
 // DeleteProduct — DELETE /products/{id}
@@ -85,7 +85,7 @@ func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Продукт удалён"})
+	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Продукт удалён"}, idStr)
 }
 
 // ListProducts — GET /products
@@ -95,5 +95,5 @@ func (h *ProductHandler) ListProducts(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, products)
+	util.WriteJSON(w, http.StatusOK, products, r.URL.Query().Get("REQUEST_ID"))
 }
