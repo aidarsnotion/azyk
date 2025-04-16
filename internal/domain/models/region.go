@@ -7,10 +7,10 @@ type Region struct {
 	ParentID     *int32              `json:"parent_id"`
 	Parent       *Region             `gorm:"foreignKey:ParentID" json:"parent"`
 	Children     []Region            `gorm:"foreignKey:ParentID" json:"children"`
-	Code         string              `gorm:"size:50" json:"code"`
-	Name         string              `gorm:"size:255;not null" json:"name"`
+	Code         string              `gorm:"size:50" validate:"required" json:"code"`
+	Name         string              `gorm:"size:255;not null" validate:"required" json:"name"`
 	Translations []RegionTranslation `gorm:"foreignKey:RegionID" json:"translations"`
-	Level        int                 `json:"level"`
+	Level        int                 `json:"level" validate:"required"`
 	Categories   []Category          `gorm:"foreignKey:RegionsID" json:"categories"`
 	BaseModel
 }

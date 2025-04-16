@@ -2,6 +2,7 @@ package main
 
 import (
 	"azyk/config"
+	"azyk/internal/domain/repository"
 	"azyk/internal/usecase/auth"
 	"azyk/internal/usecase/throttling"
 	"azyk/util"
@@ -9,7 +10,6 @@ import (
 
 	httpDelivery "azyk/internal/delivery/http"
 	"azyk/internal/domain/models"
-	"azyk/internal/domain/repository"
 	"azyk/internal/usecase"
 )
 

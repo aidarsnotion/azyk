@@ -5,6 +5,7 @@ import (
 	"azyk/internal/usecase"
 	"azyk/util"
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"net/http"
 	"strconv"
@@ -24,6 +25,12 @@ func (h *RegionHandler) Create(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+
+	if err := util.ValidateStruct(region); err != nil {
+		http.Error(w, fmt.Sprintf("Ошибка валидации: %v", err), http.StatusBadRequest)
+		return
+	}
+
 	if err := h.usecase.Create(&region); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
