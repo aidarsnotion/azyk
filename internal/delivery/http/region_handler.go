@@ -22,37 +22,35 @@ func NewRegionHandler(uc usecase.RegionUsecase) *RegionHandler {
 func (h *RegionHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var req requestbody.RequestWithPayload[models.Region]
 
-	// Чтение JSON и валидация
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
-		util.WriteJSON(w, http.StatusBadRequest, err.Error(), req.RequestID)
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
 		return
 	}
 
 	if err := util.ValidateStruct(req); err != nil {
-		util.WriteJSON(w, http.StatusBadRequest, err.Error(), req.RequestID)
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
 		return
 	}
 
-	// Обработка
 	if err := h.usecase.Create(&req.Data); err != nil {
-		util.WriteJSON(w, http.StatusInternalServerError, err.Error(), req.RequestID)
+		util.ErrorResponse(w, http.StatusInternalServerError, err.Error(), req.RequestID, req.Cmd)
 		return
 	}
 
 	// Успешный ответ
-	util.WriteJSON(w, http.StatusCreated, req.Data, req.RequestID)
+	util.SuccessResponse(w, http.StatusCreated, req.Data, req.RequestID, req.Cmd)
 }
 
 func (h *RegionHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	idStr := mux.Vars(r)["id"]
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
-		http.Error(w, "Неверный формат id", http.StatusBadRequest)
+		util.WriteJSON(w, http.StatusInternalServerError, err.Error(), idStr)
 		return
 	}
 	region, err := h.usecase.GetByID(int32(id))
 	if err != nil {
-		http.Error(w, "Регион не найден", http.StatusNotFound)
+		util.WriteJSON(w, http.StatusNotFound, err.Error(), idStr)
 		return
 	}
 	util.WriteJSON(w, http.StatusOK, region, idStr)

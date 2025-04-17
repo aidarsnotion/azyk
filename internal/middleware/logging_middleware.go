@@ -1,10 +1,10 @@
 package middleware
 
 import (
+	"azyk/util/logger"
 	"bytes"
 	"encoding/json"
 	"io"
-	"log"
 	"net/http"
 	"time"
 )
@@ -23,14 +23,12 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
-		// Чтение тела (для повторного использования)
 		var bodyBytes []byte
 		if r.Body != nil {
 			bodyBytes, _ = io.ReadAll(r.Body)
 		}
 		r.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
 
-		// Извлекаем CMD и RequestID
 		cmd := extractCMDFromRequest(r, bodyBytes)
 		requestID := extractRequestIDFromRequest(r, bodyBytes)
 
@@ -38,8 +36,15 @@ func LoggingMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(rec, r)
 
 		duration := time.Since(start)
-		log.Printf("requestId: %s, cmd: %s, method: %s, path: %s, status: %d, duration: %v",
-			requestID, cmd, r.Method, r.URL.Path, rec.Status, duration)
+
+		logger.Log.WithFields(map[string]interface{}{
+			"requestId": requestID,
+			"cmd":       cmd,
+			"method":    r.Method,
+			"path":      r.URL.Path,
+			"status":    rec.Status,
+			"duration":  duration,
+		}).Info("Handled request")
 	})
 }
 

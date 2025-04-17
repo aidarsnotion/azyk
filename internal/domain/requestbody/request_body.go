@@ -9,5 +9,5 @@ type BaseRequest struct {
 
 type RequestWithPayload[T any] struct {
 	BaseRequest
-	Data T `json:"DATA" validate:"required"`
+	Data T `json:"data" validate:"required"`
 }

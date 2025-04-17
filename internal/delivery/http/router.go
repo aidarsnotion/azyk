@@ -138,5 +138,4 @@ func (r *Router) registerRoutes() {
 // ServeHTTP реализует интерфейс http.
 func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	r.mux.ServeHTTP(w, req)
-	r.mux.Use(middleware.LoggingMiddleware)
 }
