@@ -6,9 +6,9 @@ import (
 	"azyk/internal/usecase"
 	"azyk/util"
 	"encoding/json"
-	"github.com/gorilla/mux"
+	"errors"
+	"gorm.io/gorm"
 	"net/http"
-	"strconv"
 )
 
 type RegionHandler struct {
@@ -27,6 +27,11 @@ func (h *RegionHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if req.Cmd != "CreateRegion" {
+		util.ErrorResponse(w, http.StatusBadRequest, "cmd should be CreateRegion", req.RequestID, req.Cmd)
+		return
+	}
+
 	if err := util.ValidateStruct(req); err != nil {
 		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
 		return
@@ -42,60 +47,114 @@ func (h *RegionHandler) Create(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *RegionHandler) GetByID(w http.ResponseWriter, r *http.Request) {
-	idStr := mux.Vars(r)["id"]
-	id, err := strconv.Atoi(idStr)
+	var req requestbody.BaseRequest // здесь только RequestID, Cmd и пагинация
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
+	}
+
+	if req.Cmd != "GetRegionByID" {
+		util.ErrorResponse(w, http.StatusBadRequest, "cmd should be GetRegionByID", req.RequestID, req.Cmd)
+	}
+
+	region, err := h.usecase.GetByID(int32(req.ID))
 	if err != nil {
-		util.WriteJSON(w, http.StatusInternalServerError, err.Error(), idStr)
+		util.WriteJSON(w, http.StatusNotFound, err.Error(), req.RequestID)
 		return
 	}
-	region, err := h.usecase.GetByID(int32(id))
-	if err != nil {
-		util.WriteJSON(w, http.StatusNotFound, err.Error(), idStr)
-		return
-	}
-	util.WriteJSON(w, http.StatusOK, region, idStr)
+
+	util.SuccessResponse(w, http.StatusCreated, region, req.RequestID, req.Cmd)
 }
 
 func (h *RegionHandler) List(w http.ResponseWriter, r *http.Request) {
-	idStr := mux.Vars(r)["id"]
-	regions, err := h.usecase.List()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+	var req requestbody.BaseRequest // здесь только RequestID, Cmd и пагинация
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
 		return
 	}
-	util.WriteJSON(w, http.StatusOK, regions, idStr)
+
+	if req.Cmd != "GetRegions" {
+		util.ErrorResponse(w, http.StatusBadRequest, "cmd should be CreateRegion", req.RequestID, req.Cmd)
+		return
+	}
+
+	if err := util.ValidateStruct(req); err != nil {
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
+		return
+	}
+
+	// Получаем список регионов
+	regions, err := h.usecase.List()
+	if err != nil {
+		util.ErrorResponse(w, http.StatusInternalServerError, err.Error(), req.RequestID, req.Cmd)
+		return
+	}
+
+	// Успешный ответ
+	util.SuccessResponse(w, http.StatusOK, regions, req.RequestID, req.Cmd)
 }
 
 func (h *RegionHandler) Update(w http.ResponseWriter, r *http.Request) {
-	idStr := mux.Vars(r)["id"]
-	id, err := strconv.Atoi(idStr)
+	var req requestbody.RequestWithPayload[models.Region]
+
+	// Декодинг запроса
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
+		return
+	}
+
+	if req.Cmd != "UpdateRegion" {
+		util.ErrorResponse(w, http.StatusBadRequest, "cmd should be UpdateRegion", req.RequestID, req.Cmd)
+		return
+	}
+
+	// Валидация структуры
+	if err := util.ValidateStruct(req); err != nil {
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
+		return
+	}
+
+	// Обработка в usecase
+	updatedRegion, err := h.usecase.Update(&req.Data)
 	if err != nil {
-		http.Error(w, "Неверный формат id", http.StatusBadRequest)
+		util.ErrorResponse(w, http.StatusInternalServerError, err.Error(), req.RequestID, req.Cmd)
 		return
 	}
-	var region models.Region
-	if err := json.NewDecoder(r.Body).Decode(&region); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	region.ID = int32(id)
-	if err := h.usecase.Update(&region); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	util.WriteJSON(w, http.StatusOK, region, idStr)
+
+	// Успешный ответ
+	util.SuccessResponse(w, http.StatusOK, updatedRegion, req.RequestID, req.Cmd)
 }
 
 func (h *RegionHandler) Delete(w http.ResponseWriter, r *http.Request) {
-	idStr := mux.Vars(r)["id"]
-	id, err := strconv.Atoi(idStr)
+	var req requestbody.RequestWithPayload[struct {
+		ID int32 `json:"id"`
+	}]
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		util.ErrorResponse(w, http.StatusBadRequest, err.Error(), req.RequestID, req.Cmd)
+		return
+	}
+
+	if req.Cmd != "DeleteRegion" {
+		util.ErrorResponse(w, http.StatusBadRequest, "cmd should be DeleteRegion", req.RequestID, req.Cmd)
+		return
+	}
+
+	if req.Data.ID == 0 {
+		util.ErrorResponse(w, http.StatusBadRequest, "ID is required", req.RequestID, req.Cmd)
+		return
+	}
+
+	deletedRegion, err := h.usecase.Delete(req.Data.ID)
 	if err != nil {
-		http.Error(w, "Неверный формат id", http.StatusBadRequest)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			util.ErrorResponse(w, http.StatusNotFound, "Region not found", req.RequestID, req.Cmd)
+			return
+		}
+		util.ErrorResponse(w, http.StatusInternalServerError, err.Error(), req.RequestID, req.Cmd)
 		return
 	}
-	if err := h.usecase.Delete(int32(id)); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	util.WriteJSON(w, http.StatusOK, map[string]string{"message": "Регион удалён"}, idStr)
+
+	util.SuccessResponse(w, http.StatusOK, deletedRegion, req.RequestID, req.Cmd)
 }

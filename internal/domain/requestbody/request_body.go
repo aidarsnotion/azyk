@@ -5,6 +5,7 @@ type BaseRequest struct {
 	Cmd         string `json:"cmd" validate:"required"`        // Команда/название метода
 	CurrentPage int    `json:"cuurent_page,omitempty"`         // Номер страницы
 	PageSize    int    `json:"page_size,omitempty"`            // Кол-во элементов на странице
+	ID          int64  `json:"id,omitempty"`
 }
 
 type RequestWithPayload[T any] struct {

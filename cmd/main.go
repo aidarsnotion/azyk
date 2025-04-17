@@ -5,7 +5,9 @@ import (
 	"azyk/internal/usecase/auth"
 	"azyk/internal/usecase/throttling"
 	"azyk/util"
-	"log"
+	"azyk/util/logger"
+	"github.com/sirupsen/logrus"
+	"os"
 
 	httpDelivery "azyk/internal/delivery/http"
 	"azyk/internal/domain/repository"
@@ -55,9 +57,16 @@ func initializeHandlers(db *util.Database) (*httpDelivery.AminoAcidCompositionHa
 }
 
 func main() {
+	logger.Log.WithFields(logrus.Fields{
+		"info": "azyk - 1.0.0",
+	}).Info("Starting application")
+
 	// Загрузка конфигурации
 	if err := config.InitConfig(); err != nil {
-		log.Fatalf("failed to load config: %v", err)
+		logger.Log.WithFields(map[string]interface{}{
+			"error": err.Error(),
+		}).Fatal("Failed to load configuration")
+		os.Exit(1)
 	}
 
 	cfg := config.GetConfig()

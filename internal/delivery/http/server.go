@@ -1,13 +1,14 @@
 package http
 
 import (
-	"log"
+	"azyk/util/logger"
 	"net/http"
 )
 
+// StartServer запускает HTTP сервер
 func StartServer(router *Router, addr string) {
-	log.Printf("Starting server on %s", addr)
+	logger.Log.Infof("Starting server on %s", addr)
 	if err := http.ListenAndServe(addr, router); err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		logger.Log.WithField("error", err.Error()).Fatal("Failed to start server")
 	}
 }

@@ -9,7 +9,7 @@ type Region struct {
 	Children     []Region            `gorm:"foreignKey:ParentID" json:"children"`
 	Code         string              `gorm:"size:50" json:"code"`
 	Name         string              `gorm:"size:255;not null" json:"name"`
-	Translations []RegionTranslation `gorm:"foreignKey:RegionID" json:"translations"`
+	Translations []RegionTranslation `gorm:"foreignKey:RegionID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"translations"`
 	Level        int                 `json:"level"`
 	Categories   []Category          `gorm:"foreignKey:RegionsID" json:"categories"`
 	BaseModel

@@ -128,11 +128,11 @@ func (r *Router) registerRoutes() {
 	protected.HandleFunc("/category/{id:[0-9]+}", r.CategoryHandler.Delete).Methods("DELETE")
 
 	// Маршруты для регионов
-	protected.HandleFunc("/region", r.RegionHandler.Create).Methods("POST")
-	protected.HandleFunc("/region", r.RegionHandler.List).Methods("GET")
-	protected.HandleFunc("/region/{id:[0-9]+}", r.RegionHandler.GetByID).Methods("GET")
-	protected.HandleFunc("/region/{id:[0-9]+}", r.RegionHandler.Update).Methods("PUT")
-	protected.HandleFunc("/region/{id:[0-9]+}", r.RegionHandler.Delete).Methods("DELETE")
+	protected.HandleFunc("/region", r.RegionHandler.List).Methods("POST")
+	protected.HandleFunc("/region/AddRegion", r.RegionHandler.Create).Methods("POST")
+	protected.HandleFunc("/region/GetRegionByID", r.RegionHandler.GetByID).Methods("POST")
+	protected.HandleFunc("/region/UpdateRegion", r.RegionHandler.Update).Methods("POST")
+	protected.HandleFunc("/region/DeleteRegion", r.RegionHandler.Delete).Methods("POST")
 }
 
 // ServeHTTP реализует интерфейс http.

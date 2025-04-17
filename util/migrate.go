@@ -2,10 +2,12 @@ package util
 
 import (
 	"azyk/internal/domain/models"
+	"azyk/util/logger"
 	"gorm.io/gorm"
-	"log"
+	"os"
 )
 
+// RunMigrations выполняет миграцию моделей в базе данных.
 func RunMigrations(db *gorm.DB) {
 	err := db.AutoMigrate(
 		&models.Organization{},
@@ -35,7 +37,9 @@ func RunMigrations(db *gorm.DB) {
 	)
 
 	if err != nil {
-		log.Fatalf("Ошибка при миграции моделей: %v", err)
+		logger.Log.WithField("error", err.Error()).Fatal("Ошибка при миграции моделей")
+		os.Exit(1) // важно выйти после fatal-ошибки
 	}
-	log.Println("Миграции успешно выполнены.")
+
+	logger.Log.Info("automatic migration has been successfully completed.")
 }
